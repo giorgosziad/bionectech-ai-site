@@ -770,7 +770,7 @@ document.addEventListener('scroll',onScroll,{passive:true});onScroll();
       col.classList.add('active');
       // dim the other column's active glow
       document.querySelectorAll('.chat-col').forEach(function(c){ if(c!==col) c.classList.remove('active'); });
-      fetch('/.netlify/functions/ask',{method:'POST',headers:{'Content-Type':'application/json'},
+      fetch('https://bionectech-chat.onrender.com/ask',{method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({question:q, agent:key})})
       .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,d:d}; }).catch(function(){ return {ok:r.ok,d:null}; }); })
       .then(function(res){
