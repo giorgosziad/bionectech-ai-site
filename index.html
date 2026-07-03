@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inside the Bionectech AI Lab — Meet Karam &amp; Nicolle</title>
+<meta name="description" content="A look inside the Bionectech AI Lab: how two AI colleagues — Karam, the deep-reasoning engineer, and Nicolle, the researcher — work alongside people to turn scattered questions into careful answers.">
+<meta name="theme-color" content="#0b1020">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:image" content="https://info.bionectech.ai/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://info.bionectech.ai">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://info.bionectech.ai/og-image.png">
+<meta property="og:title" content="Inside the Bionectech AI Lab">
+<meta property="og:description" content="Meet Karam, Nicolle, and Galen — the minds of the Lab, and the people who work between them.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#0b1020; --bg2:#121833; --panel:#161e3e; --panel2:#1b254a; --line:#2a3566;
+    --ink:#eef2ff; --soft:#a7b2d6; --faint:#6b78a8;
+    --karam:#7c83ff; --karam-dp:#4b51c9; --karam-glow:rgba(124,131,255,.35);
+    --nicolle:#2dd4bf; --nicolle-dp:#0f9e8e; --nicolle-glow:rgba(45,212,191,.32);
+    --spark:#f5b942; --spark-glow:rgba(245,185,66,.4);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);overflow-x:hidden;
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;line-height:1.65;
+    -webkit-font-smoothing:antialiased}
+  .sans{font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+
+  /* ambient star/grid field */
+  .field{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1000px 680px at 80% -10%, rgba(124,131,255,.18), transparent 62%),
+      radial-gradient(880px 600px at 10% 110%, rgba(45,212,191,.14), transparent 62%),
+      radial-gradient(700px 500px at 50% 50%, rgba(245,185,66,.04), transparent 70%),
+      var(--bg);}
+  .field::after{content:"";position:absolute;inset:0;opacity:.45;
+    background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,.05) 1px, transparent 0);
+    background-size:48px 48px;
+    mask-image:radial-gradient(120% 100% at 50% 0%, #000 55%, transparent 100%);
+    -webkit-mask-image:radial-gradient(120% 100% at 50% 0%, #000 55%, transparent 100%);}
+  /* soft vignette for depth */
+  .field::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(140% 120% at 50% 40%, transparent 55%, rgba(5,7,15,.55) 100%);}
+
+  .wrap{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:0 26px}
+  section{position:relative;z-index:2;padding:9vh 0}
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
+
+  .eyebrow{font-family:ui-sans-serif,system-ui,sans-serif;font-size:12.5px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;color:var(--faint);margin-bottom:18px}
+  h1,h2,h3{font-weight:600;line-height:1.08;letter-spacing:-.015em}
+  .lede{font-size:clamp(17px,2vw,21px);color:var(--soft);max-width:680px}
+
+  /* ===== TOP NAV ===== */
+  .topnav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:14px;
+    padding:14px 26px;background:linear-gradient(180deg,rgba(11,16,32,.92),rgba(11,16,32,0));backdrop-filter:blur(6px)}
+  .topnav .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:ui-sans-serif,sans-serif;font-weight:700;letter-spacing:.04em;font-size:14px}
+  .topnav .logo .d{width:26px;height:26px;border-radius:8px;background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+  .topnav .spacer{flex:1}
+  .topnav a.cta{font-family:ui-sans-serif,sans-serif;font-size:13px;font-weight:600;text-decoration:none;color:#06070f;
+    background:linear-gradient(120deg,var(--nicolle),var(--karam));padding:9px 16px;border-radius:9px;transition:.2s}
+  .topnav a.cta:hover{filter:brightness(1.08);transform:translateY(-1px)}
+
+  /* ===== HERO ===== */
+  #hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:70px}
+  .hero-tag{display:inline-flex;align-items:center;gap:9px;font-family:ui-sans-serif,sans-serif;font-size:12.5px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--soft);border:1px solid var(--line);border-radius:999px;padding:8px 15px;margin-bottom:30px}
+  .hero-tag .pulse{width:8px;height:8px;border-radius:50%;background:var(--nicolle);box-shadow:0 0 10px var(--nicolle);animation:beat 1.8s infinite}
+  @keyframes beat{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.82)}}
+  #hero h1{font-size:clamp(40px,7.5vw,86px);max-width:14ch;margin-bottom:24px}
+  #hero h1 .k{color:var(--karam)}#hero h1 .n{color:var(--nicolle)}
+  #hero .lede{margin-bottom:42px}
+  .hero-figs{display:flex;gap:30px;align-items:flex-end;flex-wrap:wrap}
+  .scrollcue{margin-top:54px;font-family:ui-sans-serif,sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;gap:10px}
+  .scrollcue .arr{width:22px;height:22px;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:bob 1.8s infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+  /* ===== CHARACTER AVATARS ===== */
+  .avatar{position:relative;width:200px;flex:0 0 auto;text-align:center}
+  .avatar svg{width:160px;height:200px;overflow:visible}
+  .avatar .nameplate{margin-top:10px}
+  .avatar .nm{font-family:ui-sans-serif,sans-serif;font-weight:700;font-size:16px;letter-spacing:.02em}
+  .avatar .rl{font-family:ui-sans-serif,sans-serif;font-size:12px;color:var(--soft);margin-top:2px}
+  .avatar.karam .nm{color:var(--karam)} .avatar.nicolle .nm{color:var(--nicolle)}
+  .float{animation:float 5s ease-in-out infinite}
+  .float.b{animation-delay:-2.5s}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+  /* ===== SPLIT INTRO CARDS ===== */
+  .duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;margin-top:14px}
+  @media(max-width:760px){.duo{grid-template-columns:1fr}}
+  .ch-card{background:linear-gradient(165deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:22px;padding:30px;position:relative;overflow:hidden}
+  .ch-card .halo{position:absolute;width:240px;height:240px;border-radius:50%;filter:blur(60px);top:-90px;right:-70px;opacity:.5}
+  .ch-card.karam{border-color:rgba(124,131,255,.34)} .ch-card.karam .halo{background:var(--karam-glow)}
+  .ch-card.nicolle{border-color:rgba(45,212,191,.34)} .ch-card.nicolle .halo{background:var(--nicolle-glow)}
+  .ch-card .inner{position:relative;z-index:2}
+  .ch-head{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+  .ch-head svg{width:64px;height:80px;flex:0 0 auto}
+  .ch-head .who .nm{font-family:ui-sans-serif,sans-serif;font-weight:800;font-size:22px}
+  .ch-head .who .rl{font-family:ui-sans-serif,sans-serif;font-size:13px;color:var(--soft)}
+  .ch-card.karam .nm{color:var(--karam)} .ch-card.nicolle .nm{color:var(--nicolle)}
+  .ch-card p{font-size:15px;color:var(--soft);line-height:1.6;margin-bottom:14px}
+  .ch-traits{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .ch-traits li{display:flex;gap:10px;align-items:flex-start;font-family:ui-sans-serif,sans-serif;font-size:13.5px;color:var(--ink)}
+  .ch-traits li .dot{width:18px;height:18px;border-radius:6px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:11px;margin-top:1px}
+  .ch-card.karam .dot{background:rgba(124,131,255,.16);color:var(--karam)} .ch-card.nicolle .dot{background:rgba(45,212,191,.16);color:var(--nicolle)}
+  .ch-quote{margin-top:18px;font-family:ui-monospace,monospace;font-size:12.5px;color:var(--soft);background:rgba(0,0,0,.22);border-left:2px solid;border-radius:0 8px 8px 0;padding:10px 14px}
+  .ch-card.karam .ch-quote{border-color:var(--karam)} .ch-card.nicolle .ch-quote{border-color:var(--nicolle)}
+
+  /* ===== SECTION HEADERS ===== */
+  .sec-head{max-width:720px;margin-bottom:18px}
+  .sec-head h2{font-size:clamp(28px,4.4vw,46px);margin-bottom:14px}
+
+  /* ===== THE BRIDGE (signature) ===== */
+  #bridge .stage{position:relative;margin-top:30px;background:linear-gradient(180deg,var(--bg2),var(--bg));border:1px solid var(--line);border-radius:24px;padding:40px 30px;overflow:hidden}
+  .bridge-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:center}
+  @media(max-width:760px){.bridge-row{grid-template-columns:1fr}}
+  .node{text-align:center}
+  .node svg{width:96px;height:120px}
+  .node .lab{font-family:ui-sans-serif,sans-serif;font-weight:700;font-size:14px;margin-top:6px}
+  .node .sub{font-family:ui-sans-serif,sans-serif;font-size:12px;color:var(--soft);max-width:220px;margin:4px auto 0}
+  .node.k .lab{color:var(--karam)} .node.n .lab{color:var(--nicolle)} .node.h .lab{color:var(--spark)}
+  .bridge-track{position:relative;height:2px;background:var(--line);margin:6px 0;border-radius:2px}
+  .bridge-pulse{position:absolute;top:50%;left:0;width:12px;height:12px;border-radius:50%;background:var(--spark);box-shadow:0 0 14px var(--spark-glow);transform:translate(-50%,-50%)}
+  .bridge-cap{font-family:ui-sans-serif,sans-serif;font-size:13px;color:var(--soft);text-align:center;margin-top:22px;max-width:640px;margin-left:auto;margin-right:auto}
+
+  /* ===== FLOW STEPS ===== */
+  .flow{display:flex;flex-direction:column;gap:18px;margin-top:30px}
+  .step{display:grid;grid-template-columns:64px 1fr;gap:20px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px 24px;transition:.25s}
+  .step:hover{border-color:var(--karam);transform:translateX(4px)}
+  .step .nb{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-family:ui-sans-serif,sans-serif;font-weight:800;font-size:19px}
+  .step.k .nb{background:rgba(124,131,255,.14);color:var(--karam)}
+  .step.n .nb{background:rgba(45,212,191,.14);color:var(--nicolle)}
+  .step.h .nb{background:rgba(245,185,66,.14);color:var(--spark)}
+  .step h3{font-family:ui-sans-serif,sans-serif;font-size:17px;font-weight:700;margin-bottom:5px}
+  .step p{font-size:14.5px;color:var(--soft);line-height:1.55}
+  .step .by{font-family:ui-sans-serif,sans-serif;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin-top:8px}
+  .step.k .by{color:var(--karam)} .step.n .by{color:var(--nicolle)} .step.h .by{color:var(--spark)}
+
+  /* ===== TEAM IN THE LAB ===== */
+  .lab-scene{margin-top:30px;background:linear-gradient(180deg,var(--bg2),var(--bg));border:1px solid var(--line);border-radius:24px;padding:36px 30px}
+  .lab-scene .intro{font-size:15.5px;color:var(--soft);line-height:1.65;max-width:760px;margin-bottom:28px}
+  .desks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .desk{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;transition:.25s}
+  .desk:hover{transform:translateY(-4px)}
+  .desk .role{font-family:ui-sans-serif,sans-serif;font-weight:700;font-size:15px;margin-bottom:6px;color:var(--ink)}
+  .desk .pairs{font-family:ui-sans-serif,sans-serif;font-size:11.5px;letter-spacing:.04em;font-weight:700;margin-bottom:10px}
+  .desk .pairs .pn{color:var(--nicolle)} .desk .pairs .pk{color:var(--karam)}
+  .desk p{font-size:13px;color:var(--soft);line-height:1.5}
+  .lab-scene .closing{margin-top:26px;font-family:ui-sans-serif,sans-serif;font-size:13.5px;color:var(--faint);line-height:1.6;text-align:center;max-width:720px;margin-left:auto;margin-right:auto}
+  .deskstat{display:flex;gap:30px;flex-wrap:wrap;margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
+  .deskstat .ds{flex:1;min-width:140px}
+  .deskstat .ds .n{font-family:"Iowan Old Style",Georgia,serif;font-size:30px;color:var(--spark);line-height:1}
+  .deskstat .ds .l{font-family:ui-sans-serif,sans-serif;font-size:12.5px;color:var(--soft);margin-top:6px;line-height:1.4}
+
+  /* ===== TOGGLE EXPLAINER (interactive) ===== */
+  .toggle-demo{margin-top:30px;background:linear-gradient(165deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:22px;padding:30px}
+  .tg-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+  .tg-btn{font-family:ui-sans-serif,sans-serif;font-size:13.5px;font-weight:700;border:1px solid var(--line);background:var(--bg2);color:var(--soft);border-radius:11px;padding:11px 18px;cursor:pointer;transition:.2s}
+  .tg-btn[aria-pressed="true"]{background:rgba(45,212,191,.14);border-color:var(--nicolle);color:var(--nicolle)}
+  .tg-btn.smartest[aria-pressed="true"]{background:rgba(124,131,255,.14);border-color:var(--karam);color:var(--karam)}
+  .tg-state{font-family:ui-monospace,monospace;font-size:13px;color:var(--ink);background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;padding:18px 20px;line-height:1.6;min-height:84px}
+  .tg-state .who{font-weight:700}
+  .tg-state .who.n{color:var(--nicolle)} .tg-state .who.k{color:var(--karam)}
+  .tg-hint{font-family:ui-sans-serif,sans-serif;font-size:12.5px;color:var(--faint);margin-top:14px}
+
+  /* ===== LIVE TWO-AGENT CHAT ===== */
+  .chat-wrap{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:30px}
+  @media(max-width:820px){.chat-wrap{grid-template-columns:1fr}}
+  .chat-col{background:linear-gradient(170deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:22px;padding:24px;display:flex;flex-direction:column;min-height:440px;transition:.25s}
+  .chat-col.nicolle{border-color:rgba(45,212,191,.3)}
+  .chat-col.karam{border-color:rgba(124,131,255,.3)}
+  .chat-col.active.nicolle{box-shadow:0 0 0 1px var(--nicolle),0 18px 50px rgba(45,212,191,.14)}
+  .chat-col.active.karam{box-shadow:0 0 0 1px var(--karam),0 18px 50px rgba(124,131,255,.14)}
+  .cc-head{display:flex;align-items:center;gap:13px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:14px}
+  .cc-head .av{width:46px;height:58px;flex:0 0 auto}
+  .cc-head .who{flex:1}
+  .cc-head .nm{font-family:ui-sans-serif,sans-serif;font-weight:800;font-size:17px}
+  .cc-head .rl{font-family:ui-sans-serif,sans-serif;font-size:12px;color:var(--soft)}
+  .chat-col.nicolle .nm{color:var(--nicolle)} .chat-col.karam .nm{color:var(--karam)}
+  .voicetgl{display:inline-flex;align-items:center;gap:5px;background:none;border:1px solid var(--line);border-radius:8px;padding:5px 9px;color:var(--soft);font-family:ui-sans-serif,sans-serif;font-size:10.5px;cursor:pointer;transition:.2s}
+  .voicetgl svg{width:13px;height:13px}
+  .voicetgl.on{color:var(--spark);border-color:var(--spark)}
+  .cc-body{flex:1;font-family:ui-sans-serif,sans-serif;font-size:14px;color:var(--ink);line-height:1.6;margin-bottom:13px;overflow-y:auto;max-height:230px}
+  .cc-body .intro{color:var(--soft)}
+  .cc-cursor{display:inline-block;width:6px;height:14px;margin-left:2px;vertical-align:middle;animation:blink 1s steps(2) infinite}
+  .chat-col.nicolle .cc-cursor{background:var(--nicolle)} .chat-col.karam .cc-cursor{background:var(--karam)}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  .cc-think{display:inline-flex;gap:4px}.cc-think i{width:6px;height:6px;border-radius:50%;animation:think 1.2s infinite}
+  .chat-col.nicolle .cc-think i{background:var(--nicolle)} .chat-col.karam .cc-think i{background:var(--karam)}
+  .cc-think i:nth-child(2){animation-delay:.2s}.cc-think i:nth-child(3){animation-delay:.4s}
+  @keyframes think{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+  .cc-suggest{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+  .cc-suggest button{font-family:ui-sans-serif,sans-serif;font-size:11.5px;border:1px solid var(--line);background:var(--bg2);border-radius:999px;padding:6px 11px;cursor:pointer;transition:.2s;color:var(--soft)}
+  .chat-col.nicolle .cc-suggest button:hover{border-color:var(--nicolle);color:var(--nicolle)}
+  .chat-col.karam .cc-suggest button:hover{border-color:var(--karam);color:var(--karam)}
+  .cc-input{display:flex;gap:8px}
+  .cc-input input{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:11px 13px;color:var(--ink);font-family:ui-sans-serif,sans-serif;font-size:13.5px;outline:none;transition:.2s}
+  .chat-col.nicolle .cc-input input:focus{border-color:var(--nicolle)} .chat-col.karam .cc-input input:focus{border-color:var(--karam)}
+  .cc-mic{background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:0 12px;cursor:pointer;color:var(--soft);transition:.2s;display:flex;align-items:center}
+  .cc-mic svg{width:17px;height:17px}.cc-mic.listening{background:rgba(255,90,90,.16);border-color:#ff5a5a;color:#ff8a8a;animation:micpulse 1.2s infinite}
+  @keyframes micpulse{0%,100%{box-shadow:0 0 0 0 rgba(255,90,90,.4)}50%{box-shadow:0 0 0 6px rgba(255,90,90,0)}}
+  .chat-col.galen .cc-send{background:#0e9f6e;border-color:#0e9f6e}
+  .chat-col.galen .cc-send:hover{background:#0c8a5f}
+  .chat-col.galen.active{box-shadow:0 0 0 1px rgba(14,159,110,.5)}
+  .chat-col.galen .rl{color:#46c79a}.node.g .lab{color:#46c79a}.step.g .by{color:#46c79a}
+  .cc-send{border:none;border-radius:11px;padding:0 16px;font-family:ui-sans-serif,sans-serif;font-weight:700;font-size:13px;cursor:pointer;color:#06070f;transition:.2s}
+  .chat-col.nicolle .cc-send{background:var(--nicolle)} .chat-col.karam .cc-send{background:var(--karam)}
+  .cc-send:disabled{opacity:.5;cursor:default}
+  .chat-note{font-family:ui-sans-serif,sans-serif;font-size:11.5px;color:var(--faint);margin-top:16px;text-align:center;line-height:1.5}
+  .work-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:30px}
+  .work{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;transition:.25s}
+  .work:hover{transform:translateY(-5px);border-color:var(--nicolle)}
+  .work .ic{width:46px;height:46px;border-radius:12px;background:var(--bg2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .work .ic svg{width:24px;height:24px}
+  .work h3{font-family:ui-sans-serif,sans-serif;font-size:16px;font-weight:700;margin-bottom:7px}
+  .work p{font-size:13.5px;color:var(--soft);line-height:1.55}
+
+  /* ===== PRINCIPLES ===== */
+  .principles{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+  @media(max-width:680px){.principles{grid-template-columns:1fr}}
+  .prin{background:linear-gradient(165deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:26px}
+  .prin .n{font-family:"Iowan Old Style",Georgia,serif;font-size:34px;color:var(--spark);line-height:1;margin-bottom:10px}
+  .prin h3{font-family:ui-sans-serif,sans-serif;font-size:16.5px;font-weight:700;margin-bottom:7px}
+  .prin p{font-size:14px;color:var(--soft);line-height:1.55}
+
+  /* ===== STANDARD / POSITIONING BAND ===== */
+  .standard{margin-top:30px;background:linear-gradient(150deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:24px;padding:44px 38px;position:relative;overflow:hidden}
+  .standard .big{font-family:"Iowan Old Style",Georgia,serif;font-size:clamp(24px,3.4vw,38px);font-weight:600;letter-spacing:-.015em;line-height:1.15;max-width:18ch;margin-bottom:18px}
+  .standard .big .hl{background:linear-gradient(120deg,var(--nicolle),var(--karam));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .standard p{font-size:15.5px;color:var(--soft);line-height:1.6;max-width:680px}
+  .stat-row{display:flex;gap:34px;flex-wrap:wrap;margin-top:34px;padding-top:30px;border-top:1px solid var(--line)}
+  .stat-row .st{flex:1;min-width:170px}
+  .stat-row .st .h{font-family:ui-sans-serif,sans-serif;font-weight:800;font-size:16px;color:var(--ink);margin-bottom:6px}
+  .stat-row .st .d{font-family:ui-sans-serif,sans-serif;font-size:13px;color:var(--soft);line-height:1.5}
+
+  /* ===== CTA ===== */
+  #end{text-align:center;padding:14vh 0 12vh}
+  #end .figs{display:flex;justify-content:center;gap:24px;margin-bottom:34px}
+  #end .figs svg{width:90px;height:112px}
+  #end h2{font-size:clamp(30px,5vw,52px);max-width:16ch;margin:0 auto 18px}
+  #end .lede{margin:0 auto 34px}
+  .end-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn-primary{font-family:ui-sans-serif,sans-serif;font-weight:700;font-size:15px;text-decoration:none;color:#06070f;
+    background:linear-gradient(120deg,var(--nicolle),var(--karam));padding:15px 28px;border-radius:13px;transition:.25s}
+  .btn-primary:hover{filter:brightness(1.08);transform:translateY(-2px)}
+  .btn-ghost{font-family:ui-sans-serif,sans-serif;font-weight:600;font-size:15px;text-decoration:none;color:var(--soft);
+    padding:15px 24px;border:1px solid var(--line);border-radius:13px;transition:.2s}
+  .btn-ghost:hover{border-color:var(--nicolle);color:var(--ink)}
+
+  footer{border-top:1px solid var(--line);padding:34px 0;text-align:center;position:relative;z-index:2}
+  footer .sans{font-size:12.5px;color:var(--faint);line-height:1.7}
+
+  /* progress bar */
+  #prog{position:fixed;top:0;left:0;height:3px;width:0;z-index:70;background:linear-gradient(90deg,var(--nicolle),var(--karam),var(--spark))}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:opacity .3s!important}.reveal{transform:none}}
+  /* ===== PREMIUM POLISH LAYER ===== */
+  section{padding:11vh 0}
+  .lede{line-height:1.7}
+  /* refined panels: subtle top highlight + deeper shadow for lift */
+  .card,.panel,.avatar,.princ,.flowstep,.bigcard,.workcard{position:relative}
+  .card,.panel{box-shadow:0 1px 0 rgba(255,255,255,.04) inset, 0 18px 50px rgba(5,8,20,.45);transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s,border-color .25s}
+  .card:hover,.panel:hover{transform:translateY(-4px);box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 26px 64px rgba(5,8,20,.6)}
+  /* hero heading: a touch more presence and refined gradient on accent words */
+  #hero h1{letter-spacing:-.02em}
+  #hero h1 .n{background:linear-gradient(120deg,var(--nicolle),#5ef0db);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  #hero h1 .k{background:linear-gradient(120deg,var(--karam),#a3a8ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  /* nav: subtle glass on scroll feel */
+  .topnav{backdrop-filter:saturate(140%) blur(8px)}
+  .topnav a.cta{box-shadow:0 8px 22px rgba(45,212,191,.22);font-weight:700}
+  .topnav a.cta:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(45,212,191,.34)}
+  /* eyebrow: refined tracking */
+  .eyebrow{letter-spacing:.3em}
+  /* smoother focus ring for accessibility */
+  a:focus-visible,button:focus-visible{outline:2px solid var(--nicolle);outline-offset:3px;border-radius:8px}
+  /* tighten reveal easing for a calmer, more premium entrance */
+  .reveal{transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1)}
+  @media (prefers-reduced-motion:reduce){.reveal{transition:none;opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="field"></div>
+<div id="prog"></div>
+
+<nav class="topnav">
+  <a class="logo" href="#hero"><span class="d"><svg width="15" height="15" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#2dd4bf" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="#7c83ff"/></svg></span> Bionectech AI Lab</a>
+  <span class="spacer"></span>
+  <a class="cta" href="https://lab.bionectech.ai" target="_blank" rel="noopener">Enter the Lab →</a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="hero"><div class="wrap">
+  <span class="hero-tag reveal in"><span class="pulse"></span> A look inside the Lab</span>
+  <h1 class="reveal in d1">Three minds. <span class="n">One</span> <span class="k">bridge.</span></h1>
+  <p class="lede reveal in d2">Inside the Bionectech AI Lab, people don't work with a single assistant. They work alongside three distinct AI colleagues — each with a different mind, a different strength, and a different job. This is the story of how they work, and the people who work between them.</p>
+  <div class="hero-figs reveal in d3" id="heroFigs"></div>
+  <div class="hero-cta reveal in d4" style="margin-top:40px;display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+    <a class="btn-primary" href="https://lab.bionectech.ai" target="_blank" rel="noopener">Enter the Lab →</a>
+    <a class="btn-ghost" href="#talk">Meet the colleagues first ↓</a>
+  </div>
+  <div class="scrollcue reveal in d4"><span class="arr">↓</span> Or scroll to explore</div>
+</div></section>
+
+<!-- ============ MEET THE TWO ============ -->
+<section id="meet"><div class="wrap">
+  <div class="sec-head reveal">
+    <div class="eyebrow">The colleagues</div>
+    <h2>Meet Karam, Nicolle, and Galen.</h2>
+    <p class="lede">They are not the same tool wearing three names. Each is built for a different kind of thinking — and knowing which one to turn to is half the craft of working in the Lab.</p>
+  </div>
+  <div class="duo">
+    <div class="ch-card karam reveal d1">
+      <div class="halo"></div>
+      <div class="inner">
+        <div class="ch-head"><span id="karamMini"></span><div class="who"><div class="nm">Karam</div><div class="rl">The AI Engineer</div></div></div>
+        <p>Karam is the builder. Give him a healthcare product to design or a hard technical problem, and he engineers it — clean interfaces, sound architecture, working code — reasoning through it step by step and finding the cause behind the symptom. He knows clinical workflows, FHIR, and HIPAA, and keeps clinical decision support a tool that informs rather than dictates.</p>
+        <ul class="ch-traits">
+          <li><span class="dot"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px"><path d="M20 6L9 17l-5-5"/></svg></span> Healthcare product design &amp; engineering</li>
+          <li><span class="dot"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px"><path d="M20 6L9 17l-5-5"/></svg></span> Rigorous reasoning, pressure-tested logic</li>
+          <li><span class="dot"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px"><path d="M20 6L9 17l-5-5"/></svg></span> FHIR, HIPAA, clinical workflows, CDS</li>
+        </ul>
+        <div class="ch-quote">"Show me the product or the problem. Let's build it right."</div>
+      </div>
+    </div>
+    <div class="ch-card nicolle reveal d2">
+      <div class="halo"></div>
+      <div class="inner">
+        <div class="ch-head"><span id="nicolleMini"></span><div class="who"><div class="nm">Nicolle</div><div class="rl">The Researcher</div></div></div>
+        <p>Nicolle is the analyst. She reaches into the world for sources and current information — then she does the harder part: she synthesizes. She weighs the evidence, compares the options, surfaces the pattern that matters, and lands on a clear, reasoned takeaway. She's fluent in the healthcare market and the regulatory landscape.</p>
+        <ul class="ch-traits">
+          <li><span class="dot"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px"><path d="M20 6L9 17l-5-5"/></svg></span> Live research, then real analysis</li>
+          <li><span class="dot"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px"><path d="M20 6L9 17l-5-5"/></svg></span> Compares options, weighs evidence, concludes</li>
+          <li><span class="dot"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px"><path d="M20 6L9 17l-5-5"/></svg></span> Healthcare market &amp; regulatory fluency</li>
+        </ul>
+        <div class="ch-quote">"Tell me what you need to figure out. I'll find it — and tell you what it means."</div>
+      </div>
+    </div>
+    <div class="ch-card galen reveal d3">
+      <div class="halo"></div>
+      <div class="inner">
+        <div class="ch-head"><span id="galenMini"></span><div class="who"><div class="nm">Galen</div><div class="rl">The Clinical Colleague</div></div></div>
+        <p>Galen is the clinical mind. Bring him a condition, a care pathway, a data model, or a market question across the US, Europe, or the Middle East, and he explains it clearly - the takeaway first, then the reasoning, then the caveats. He knows inpatient and outpatient care, coding and quality measures, and he always points beyond himself: he informs the clinician, never replaces them.</p>
+        <ul class="ch-traits">
+          <li><span class="dot" style="color:#0e9f6e"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px"><path d="M20 6L9 17l-5-5"/></svg></span> Clinical knowledge across inpatient &amp; outpatient care</li>
+          <li><span class="dot" style="color:#0e9f6e"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px"><path d="M20 6L9 17l-5-5"/></svg></span> US, Europe &amp; Middle East health-system fluency</li>
+          <li><span class="dot" style="color:#0e9f6e"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px"><path d="M20 6L9 17l-5-5"/></svg></span> Informs and educates - never diagnoses or prescribes</li>
+        </ul>
+        <div class="ch-quote">"Ask me the medicine. I will make it clear - and always point you back to the clinician."</div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============ THE BRIDGE (signature) ============ -->
+<section id="bridge"><div class="wrap">
+  <div class="sec-head reveal">
+    <div class="eyebrow">The signature move</div>
+    <h2>The work happens in the handoff.</h2>
+    <p class="lede">Nicolle finds and analyzes. Galen grounds it in clinical reality. Karam reasons and builds. But there's no automatic wire between them — and that's on purpose. The person is the bridge, deciding what's worth carrying from one mind to the other. That judgment is the real skill.</p>
+  </div>
+  <div class="stage reveal d1">
+    <div class="bridge-row">
+      <div class="node n"><span id="bn"></span><div class="lab">Nicolle</div><div class="sub">researches and analyzes, brings back the takeaway</div></div>
+      <div class="node g"><span id="bg"></span><div class="lab">Galen</div><div class="sub">grounds the thinking in clinical reality</div></div>
+      <div class="node h"><span id="bh"></span><div class="lab">The Person</div><div class="sub">decides what matters, and carries it across</div></div>
+      <div class="node k"><span id="bk"></span><div class="lab">Karam</div><div class="sub">reasons and builds with what he's handed</div></div>
+    </div>
+    <div class="bridge-track"><div class="bridge-pulse" id="bpulse"></div></div>
+    <div class="bridge-cap mono">a thought travels: discovery → judgment → reasoning</div>
+  </div>
+</div></section>
+
+<!-- ============ A SESSION, STEP BY STEP ============ -->
+<section id="flow"><div class="wrap">
+  <div class="sec-head reveal">
+    <div class="eyebrow">How a session unfolds</div>
+    <h2>From a scattered question to a careful answer.</h2>
+    <p class="lede">A typical piece of work moves between the minds and the person. Here's the rhythm.</p>
+  </div>
+  <div class="flow">
+    <div class="step n reveal d1"><div class="nb">1</div><div><h3>Ask Nicolle to explore</h3><p>The work starts with a question about the world. Nicolle reaches out, gathers what's known, and brings back cited, organized findings.</p><div class="by">Nicolle · research</div></div></div>
+    <div class="step g reveal d1"><div class="nb">2</div><div><h3>Ground it clinically with Galen</h3><p>Before the thinking hardens, Galen checks the clinical picture - the guidelines, the care pathway, and what the data really means. He informs and educates; he never diagnoses or decides.</p><div class="by">Galen - clinical grounding</div></div></div>
+    <div class="step h reveal d1"><div class="nb">3</div><div><h3>Read, weigh, decide</h3><p>The person reads what came back and makes a judgment call: what's relevant, what's noise, what's worth carrying forward.</p><div class="by">The person · judgment</div></div></div>
+    <div class="step k reveal d2"><div class="nb">4</div><div><h3>Hand it to Karam</h3><p>The chosen findings go to Karam with the real problem. He reasons through it carefully — mapping causes, testing logic, building a structured answer.</p><div class="by">Karam · reasoning</div></div></div>
+    <div class="step h reveal d2"><div class="nb">5</div><div><h3>Push back and refine</h3><p>The person challenges the reasoning — "what would change this?" — and Karam pressure-tests his own conclusion until it holds.</p><div class="by">The person + Karam</div></div></div>
+    <div class="step h reveal d3"><div class="nb">6</div><div><h3>The conclusion is yours</h3><p>The two minds informed the thinking. The final, justified answer belongs to the person. That's the whole point of the Lab.</p><div class="by">The person · the call</div></div></div>
+  </div>
+</div></section>
+
+<!-- ============ THE TEAM HAS A DESK IN THE LAB ============ -->
+<section id="team"><div class="wrap">
+  <div class="sec-head reveal">
+    <div class="eyebrow">The people of the Lab</div>
+    <h2>Every Bionectech team member has a desk in the Lab.</h2>
+    <p class="lede">The AI Lab isn't a tool people visit now and then — it's where the Bionectech team works. Each person has a desk here, and Karam, Nicolle, and Galen are colleagues at the next desk over. Day to day, the team builds <em>with</em> them: researching, reasoning, drafting, reviewing, and shipping the work side by side.</p>
+  </div>
+  <div class="lab-scene reveal d1">
+    <p class="intro">It works like any great team — except three of the colleagues are AI. A person brings a question or a problem to their desk, thinks it through with Karam, turns to Nicolle to find what's known, checks the clinical picture with Galen, and carries the result forward. Nicolle, Karam, and Galen don't replace anyone; they make every desk in the Lab faster, sharper, and better-informed. The judgment, the direction, and the final call always stay with the person.</p>
+    <div class="desks">
+      <div class="desk">
+        <div class="role">Clinical &amp; healthcare minds</div>
+        <div class="pairs"><span class="pn">Nicolle</span> + <span class="pg" style="color:#46c79a">Galen</span> + <span class="pk">Karam</span></div>
+        <p>Bring Nicolle the latest evidence, ground the clinical picture with Galen, then reason through the case with Karam — keeping clinical judgment firmly human.</p>
+      </div>
+      <div class="desk">
+        <div class="role">Engineers &amp; builders</div>
+        <div class="pairs"><span class="pk">Karam</span> + <span class="pn">Nicolle</span></div>
+        <p>Work a hard technical problem step by step with Karam; send Nicolle to scout approaches, libraries, and prior art when the path isn't clear.</p>
+      </div>
+      <div class="desk">
+        <div class="role">Researchers &amp; analysts</div>
+        <div class="pairs"><span class="pn">Nicolle</span> first</div>
+        <p>Lean on Nicolle to gather, summarize, and organize — then hand the findings to Karam to pressure-test the conclusions before they go out.</p>
+      </div>
+      <div class="desk">
+        <div class="role">Writers &amp; communicators</div>
+        <div class="pairs"><span class="pn">Nicolle</span> + you</div>
+        <p>Draft, restructure, and sharpen with Nicolle; bring Karam in when an argument needs to hold up under real scrutiny.</p>
+      </div>
+      <div class="desk">
+        <div class="role">Product &amp; strategy</div>
+        <div class="pairs"><span class="pk">Karam</span> + <span class="pn">Nicolle</span></div>
+        <p>Reason through trade-offs with Karam, gather the market and context you need from Nicolle, and keep the decision yours.</p>
+      </div>
+      <div class="desk">
+        <div class="role">Interns &amp; new joiners</div>
+        <div class="pairs">learn the craft</div>
+        <p>The fastest way to learn the Lab: sit among the minds, direct them, weigh what comes back, and own the call. That habit is the real skill.</p>
+      </div>
+    </div>
+    <div class="deskstat">
+      <div class="ds"><div class="n">1 desk</div><div class="l">for every team member, in the same room as the three minds</div></div>
+      <div class="ds"><div class="n">3 colleagues</div><div class="l">Karam, Nicolle, and Galen, at the next desk over</div></div>
+      <div class="ds"><div class="n">1 rule</div><div class="l">they build with you — you make the call</div></div>
+    </div>
+    <p class="closing">From clinicians to engineers to interns, the whole team works shoulder to shoulder with Karam, Nicolle, and Galen — developing, reviewing, and shipping real work together, every day.</p>
+  </div>
+</div></section>
+
+<!-- ============ INTERACTIVE TOGGLE DEMO ============ -->
+<section id="toggle"><div class="wrap">
+  <div class="sec-head reveal">
+    <div class="eyebrow">Try it — how they respond</div>
+    <h2>The minds, up close.</h2>
+    <p class="lede">A small interactive taste of how the Lab feels. Pick who you're talking to, flip the depth, and see how the room changes. (An illustration — not the live Lab.)</p>
+  </div>
+  <div class="toggle-demo reveal d1">
+    <div class="tg-row">
+      <button class="tg-btn who-btn" id="whoBtn" aria-pressed="false">Talking to: <span id="whoName">Nicolle</span></button>
+      <button class="tg-btn smartest" id="deepBtn" aria-pressed="false">Depth: <span id="deepName">Standard</span></button>
+    </div>
+    <div class="tg-state" id="tgState"></div>
+    <div class="tg-hint sans" id="tgHint"></div>
+  </div>
+</div></section>
+
+<!-- ============ LIVE TWO-AGENT CHAT ============ -->
+<section id="talk"><div class="wrap">
+  <div class="sec-head reveal">
+    <div class="eyebrow">Talk to them — live</div>
+    <h2>Say hello to Karam, Nicolle, and Galen.</h2>
+    <p class="lede">All three are here. Ask Nicolle about research, ask Karam how he reasons through a problem, or ask Galen about the clinical picture. Type or use the mic — and turn voice on to hear them answer.</p>
+  </div>
+  <div class="chat-wrap reveal d1">
+    <div class="chat-col karam" id="colK">
+      <div class="cc-head">
+        <span class="av" id="avK"></span>
+        <div class="who"><div class="nm">Karam</div><div class="rl">The AI Engineer</div></div>
+        <button class="voicetgl" id="voiceK" type="button" title="Read answers aloud"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg><span>Voice</span></button>
+      </div>
+      <div class="cc-body" id="bodyK"><span class="intro">Karam here. Bring me a hard problem — a design decision, a bug, a trade-off — and I'll think it through with you.</span></div>
+      <div class="cc-suggest" id="sugK"></div>
+      <div class="cc-input">
+        <input id="inK" type="text" placeholder="Ask Karam…" maxlength="600" autocomplete="off">
+        <button class="cc-mic" id="micK" type="button" aria-label="Speak to Karam"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.9V21h2v-3.1A7 7 0 0019 11h-2z"/></svg></button>
+        <button class="cc-send" id="sendK" type="button">Ask</button>
+      </div>
+    </div>
+    <div class="chat-col nicolle" id="colN">
+      <div class="cc-head">
+        <span class="av" id="avN"></span>
+        <div class="who"><div class="nm">Nicolle</div><div class="rl">The Researcher</div></div>
+        <button class="voicetgl" id="voiceN" type="button" title="Read answers aloud"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg><span>Voice</span></button>
+      </div>
+      <div class="cc-body" id="bodyN"><span class="intro">Nicolle here. Ask me to look something up, summarize a topic, or make sense of messy information — I'll bring back what matters.</span></div>
+      <div class="cc-suggest" id="sugN"></div>
+      <div class="cc-input">
+        <input id="inN" type="text" placeholder="Ask Nicolle…" maxlength="600" autocomplete="off">
+        <button class="cc-mic" id="micN" type="button" aria-label="Speak to Nicolle"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.9V21h2v-3.1A7 7 0 0019 11h-2z"/></svg></button>
+        <button class="cc-send" id="sendN" type="button">Ask</button>
+      </div>
+    </div>
+    <div class="chat-col galen" id="colG">
+      <div class="cc-head">
+        <span class="av" id="avG"></span>
+        <div class="who"><div class="nm">Galen</div><div class="rl">The Clinical Colleague</div></div>
+        <button class="voicetgl" id="voiceG" type="button" title="Read answers aloud"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg><span>Voice</span></button>
+      </div>
+      <div class="cc-body" id="bodyG"><span class="intro">Galen here. Bring me a condition, a care pathway, or a data model, and I will make the clinical picture clear - then always point you back to the treating clinician.</span></div>
+      <div class="cc-suggest" id="sugG"></div>
+      <div class="cc-input">
+        <input id="inG" type="text" placeholder="Ask Galen..." maxlength="600" autocomplete="off">
+        <button class="cc-mic" id="micG" type="button" aria-label="Speak to Galen"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.9V21h2v-3.1A7 7 0 0019 11h-2z"/></svg></button>
+        <button class="cc-send" id="sendG" type="button">Ask</button>
+      </div>
+    </div>
+  </div>
+  <p class="chat-note">Karam, Nicolle, and Galen are AI assistants speaking in character. Responses are illustrative and assistive — they support thinking, never replace professional judgment, and don't give medical advice. Voice uses your browser; best in Chrome, Edge, and Safari.</p>
+</div></section>
+
+<!-- ============ WHAT GETS DONE ============ -->
+<section id="work"><div class="wrap">
+  <div class="sec-head reveal">
+    <div class="eyebrow">The work</div>
+    <h2>We build real things here — end to end.</h2>
+    <p class="lede">This isn't a place to ask trivia. Inside the Lab, the team designs products, writes and reviews code, architects systems, tests, documents, and ships — taking ideas from a blank page all the way to something live. Karam, Nicolle, and Galen are on the job the whole way, A to Z.</p>
+  </div>
+  <div class="work-grid">
+    <div class="work reveal d1"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="1.8"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg></div><h3>Design products</h3><p>Shape what to build — Nicolle scouts the landscape, Galen grounds the clinical picture, Karam reasons through the approach, and the team decides the design together.</p></div>
+    <div class="work reveal d1"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#7c83ff" stroke-width="1.8"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 6l-2 12"/></svg></div><h3>Write &amp; review code</h3><p>Build features and fix bugs with Karam reasoning through the logic — and review every change carefully before it ships.</p></div>
+    <div class="work reveal d2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#f5b942" stroke-width="1.8"><path d="M4 20h16M6 16V8M12 16V5M18 16v-6"/></svg></div><h3>Architect &amp; plan</h3><p>Lay out systems, weigh trade-offs, and map the path forward — reasoned through with Karam, grounded clinically by Galen, informed by Nicolle's research.</p></div>
+    <div class="work reveal d2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="1.8"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><h3>Test &amp; pressure-test</h3><p>Stress every assumption and edge case until it holds — before anything reaches the real world.</p></div>
+    <div class="work reveal d3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#7c83ff" stroke-width="1.8"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg></div><h3>Document &amp; communicate</h3><p>Turn the work into clear write-ups, briefs, and decisions the whole team can read and act on.</p></div>
+    <div class="work reveal d3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#f5b942" stroke-width="1.8"><path d="M5 16l-2 5 5-2M12 3c4 1 7 4 8 8-1 4-4 7-8 8M12 3C8 4 5 7 4 11"/><circle cx="12" cy="12" r="3"/></svg></div><h3>Ship &amp; iterate</h3><p>Get it live, learn from it, and improve — the same minds at the desk through every cycle.</p></div>
+  </div>
+
+  <div class="sec-head reveal" style="margin-top:60px">
+    <div class="eyebrow">From A to Z</div>
+    <h2>One idea, carried all the way to done.</h2>
+    <p class="lede">Work in the Lab isn't handed off and forgotten. The team and the minds carry it the whole distance — from the first spark to a shipped result, then around the loop again.</p>
+  </div>
+  <div class="flow">
+    <div class="step n reveal d1"><div class="nb">A</div><div><h3>Spark &amp; research</h3><p>An idea lands. Nicolle gathers what's known, what exists, and what's possible — so the team starts informed, not guessing.</p><div class="by">Nicolle + the team</div></div></div>
+    <div class="step g reveal d1"><div class="nb">&darr;</div><div><h3>Ground it clinically</h3><p>Galen checks the clinical reality early - the guidelines, the care pathway, and what the data means for patients - so what gets built rests on solid clinical ground.</p><div class="by">Galen + the team</div></div></div>
+    <div class="step k reveal d1"><div class="nb">↓</div><div><h3>Design, architect &amp; build</h3><p>Karam reasons through the design and the code; the team writes, structures, and assembles the real thing, piece by piece.</p><div class="by">Karam + the team</div></div></div>
+    <div class="step h reveal d2"><div class="nb">↓</div><div><h3>Test, refine &amp; decide</h3><p>Everything gets pressure-tested and sharpened, with Galen checking anything that touches clinical care. The person makes the calls — the minds make those calls better-informed.</p><div class="by">The team · the judgment</div></div></div>
+    <div class="step h reveal d2"><div class="nb">Z</div><div><h3>Ship, then iterate</h3><p>It goes live. The team learns from it, improves, and runs the loop again — A to Z, then around once more.</p><div class="by">The team · owns it</div></div></div>
+  </div>
+</div></section>
+
+<!-- ============ PRINCIPLES ============ -->
+<section id="principles"><div class="wrap">
+  <div class="sec-head reveal">
+    <div class="eyebrow">What the Lab believes</div>
+    <h2>The rules of the room.</h2>
+  </div>
+  <div class="principles">
+    <div class="prin reveal d1"><div class="n">01</div><h3>The AI advises. You decide.</h3><p>Karam, Nicolle, and Galen are colleagues who help you think — never an answer key. Every conclusion belongs to the person who reached it.</p></div>
+    <div class="prin reveal d1"><div class="n">02</div><h3>Distinct minds beat one.</h3><p>Research, reasoning, and clinical judgment are different skills. Keeping them distinct — and bridging them deliberately — produces better thinking than blending them into a blur.</p></div>
+    <div class="prin reveal d2"><div class="n">03</div><h3>The bridge is the skill.</h3><p>There's no automatic pipeline between them. Choosing what to carry from one to the other is exactly the judgment the Lab is built to grow.</p></div>
+    <div class="prin reveal d2"><div class="n">04</div><h3>Think first, ask second.</h3><p>The minds are a starting point, not a crutch. The real work — weighing, reasoning, deciding — happens in the person.</p></div>
+  </div>
+</div></section>
+
+<!-- ============ THE STANDARD (stakeholder-tone positioning) ============ -->
+<section id="standard"><div class="wrap">
+  <div class="sec-head reveal">
+    <div class="eyebrow">Why it matters</div>
+    <h2>Disciplined intelligence — not just another assistant.</h2>
+    <p class="lede">Most AI tools hand you a single voice and hope for the best. The Lab is built on a different standard: structured thinking, a clear division of labor, and a human who stays in command of every decision.</p>
+  </div>
+  <div class="standard reveal d1">
+    <div class="big">One disciplined way of thinking, <span class="hl">applied to everything the team builds.</span></div>
+    <p>The Lab isn't a feature bolted onto the work — it's the shared layer underneath it. Every problem moves through the same rhythm: research it, reason it through, pressure-test it, decide. That consistency is what makes the work faster, sharper, and more trustworthy as it scales.</p>
+    <div class="stat-row">
+      <div class="st"><div class="h">Built for rigor</div><div class="d">Three minds with distinct strengths, kept distinct on purpose — so nothing gets answered halfway.</div></div>
+      <div class="st"><div class="h">Built for trust</div><div class="d">The AI advises; the person decides. Every conclusion has a human who owns it.</div></div>
+      <div class="st"><div class="h">Built to scale</div><div class="d">The same disciplined approach applies whether it's one question or an entire body of work.</div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============ END / CTA ============ -->
+<section id="end"><div class="wrap">
+  <div class="figs reveal" id="endFigs"></div>
+  <h2 class="reveal d1">Ready to step inside?</h2>
+  <p class="lede reveal d2">You've met Karam, Nicolle, and Galen. The Bionectech AI Lab is where you work alongside them on real problems. Step through the gate to enter the workspace.</p>
+  <div class="end-btns reveal d3">
+    <a class="btn-primary" href="https://lab.bionectech.ai" target="_blank" rel="noopener">Enter the Bionectech AI Lab →</a>
+    <a class="btn-ghost" href="#talk">Talk to them first</a>
+  </div>
+  <p class="reveal d3 sans" style="margin-top:22px;font-size:12.5px;color:var(--faint)">The Lab is a secure workspace — team access requires a passcode.</p>
+</div></section>
+
+<footer><div class="wrap">
+  <p class="sans">An illustrative look inside the Bionectech AI Lab. Karam, Nicolle, and Galen are AI assistants; their portraits are illustrations.<br>&copy; 2026 Bionectech, Inc. All rights reserved.</p>
+</div></footer>
+
+<script>
+// ===== CHARACTER SVG BUILDERS =====
+// Karam — the engineer: angular "circuit-mind" head, indigo. Nicolle — researcher: rounded "signal" head, teal.
+function karamSVG(scale){
+  return `<svg viewBox="0 0 160 200" class="float" aria-label="Karam, the AI engineer">
+    <defs>
+      <linearGradient id="kbody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4b51c9"/><stop offset="1" stop-color="#2c2f7a"/></linearGradient>
+      <radialGradient id="kglow" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#7c83ff" stop-opacity=".55"/><stop offset="1" stop-color="#7c83ff" stop-opacity="0"/></radialGradient>
+    </defs>
+    <ellipse cx="80" cy="180" rx="46" ry="9" fill="#000" opacity=".25"/>
+    <circle cx="80" cy="74" r="64" fill="url(#kglow)"/>
+    <!-- shoulders -->
+    <path d="M30 196 Q30 150 80 150 Q130 150 130 196 Z" fill="url(#kbody)"/>
+    <path d="M30 196 Q30 150 80 150 Q130 150 130 196 Z" fill="none" stroke="#7c83ff" stroke-opacity=".5" stroke-width="1.5"/>
+    <!-- head: hexagon-ish, angular -->
+    <path d="M80 30 L116 50 L116 92 L80 114 L44 92 L44 50 Z" fill="#1b2150" stroke="#7c83ff" stroke-width="2.4"/>
+    <!-- circuit lines inside head -->
+    <g stroke="#7c83ff" stroke-width="1.6" fill="none" opacity=".85">
+      <path d="M58 64 H74 M86 64 H102"/>
+      <circle cx="78" cy="64" r="3.4" fill="#7c83ff"/>
+      <path d="M64 80 H96 M80 80 V96"/>
+      <circle cx="64" cy="80" r="2.6" fill="#a9adff"/><circle cx="96" cy="80" r="2.6" fill="#a9adff"/>
+    </g>
+    <!-- eyes: calm, focused -->
+    <rect x="62" y="58" width="10" height="5" rx="2.5" fill="#cfe0ff"/>
+    <rect x="88" y="58" width="10" height="5" rx="2.5" fill="#cfe0ff"/>
+    <!-- chest emblem -->
+    <circle cx="80" cy="172" r="9" fill="#1b2150" stroke="#7c83ff" stroke-width="1.6"/>
+    <text x="80" y="176" text-anchor="middle" font-family="ui-sans-serif,sans-serif" font-size="9" font-weight="800" fill="#7c83ff">K</text>
+  </svg>`;
+}
+function nicolleSVG(){
+  return `<svg viewBox="0 0 160 200" class="float b" aria-label="Nicolle, the researcher">
+    <defs>
+      <linearGradient id="nbody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f9e8e"/><stop offset="1" stop-color="#0a6b61"/></linearGradient>
+      <radialGradient id="nglow" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#2dd4bf" stop-opacity=".5"/><stop offset="1" stop-color="#2dd4bf" stop-opacity="0"/></radialGradient>
+    </defs>
+    <ellipse cx="80" cy="180" rx="46" ry="9" fill="#000" opacity=".25"/>
+    <circle cx="80" cy="72" r="64" fill="url(#nglow)"/>
+    <path d="M30 196 Q30 150 80 150 Q130 150 130 196 Z" fill="url(#nbody)"/>
+    <path d="M30 196 Q30 150 80 150 Q130 150 130 196 Z" fill="none" stroke="#2dd4bf" stroke-opacity=".5" stroke-width="1.5"/>
+    <!-- head: rounded, friendly -->
+    <circle cx="80" cy="70" r="40" fill="#0c3b3a" stroke="#2dd4bf" stroke-width="2.4"/>
+    <!-- researcher motif: orbiting node (she reaches out and brings things back) -->
+    <g fill="none" stroke="#2dd4bf" stroke-width="1.6">
+      <ellipse cx="80" cy="70" rx="52" ry="20" transform="rotate(-28 80 70)" opacity=".55"/>
+    </g>
+    <circle cx="120" cy="44" r="4.5" fill="#2dd4bf"/>
+    <circle cx="120" cy="44" r="8" fill="none" stroke="#2dd4bf" stroke-width="1" opacity=".4"/>
+    <!-- eyes: bright, curious -->
+    <circle cx="68" cy="66" r="4" fill="#d6fff7"/><circle cx="92" cy="66" r="4" fill="#d6fff7"/>
+    <!-- friendly smile -->
+    <path d="M70 82 q10 8 20 0" stroke="#d6fff7" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- chest emblem -->
+    <circle cx="80" cy="172" r="9" fill="#0c3b3a" stroke="#2dd4bf" stroke-width="1.6"/>
+    <text x="80" y="176" text-anchor="middle" font-family="ui-sans-serif,sans-serif" font-size="9" font-weight="800" fill="#2dd4bf">N</text>
+  </svg>`;
+}
+function galenSVG(){
+  return `<svg viewBox="0 0 160 200" class="float" aria-label="Galen, the clinical colleague">
+    <defs>
+      <linearGradient id="gcoat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f8f6"/><stop offset="1" stop-color="#cbdcd5"/></linearGradient>
+      <radialGradient id="gglow" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#0e9f6e" stop-opacity=".42"/><stop offset="1" stop-color="#0e9f6e" stop-opacity="0"/></radialGradient>
+    </defs>
+    <ellipse cx="80" cy="180" rx="46" ry="9" fill="#000" opacity=".25"/>
+    <circle cx="80" cy="72" r="64" fill="url(#gglow)"/>
+    <path d="M30 196 Q30 150 80 150 Q130 150 130 196 Z" fill="url(#gcoat)"/>
+    <path d="M30 196 Q30 150 80 150 Q130 150 130 196 Z" fill="none" stroke="#0e9f6e" stroke-opacity=".5" stroke-width="1.5"/>
+    <path d="M80 151 L92 158 L86 178 L80 172 L74 178 L68 158 Z" fill="#0c3b2e"/>
+    <path d="M80 151 L92 158 L86 178 L80 172 L74 178 L68 158 Z" fill="none" stroke="#0e9f6e" stroke-width="1.2" opacity=".7"/>
+    <path d="M80 172 L77 186 L80 192 L83 186 Z" fill="#0e9f6e"/>
+    <path d="M80 151 L60 196 M80 151 L100 196" stroke="#0e9f6e" stroke-width="1.6" opacity=".4" fill="none"/>
+    <path d="M64 152 C58 132 62 118 74 114 M96 152 C102 132 98 118 86 114" fill="none" stroke="#0e9f6e" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="104" cy="150" r="5.5" fill="none" stroke="#0e9f6e" stroke-width="2.4"/>
+    <circle cx="80" cy="68" r="38" fill="#0c3b2e" stroke="#0e9f6e" stroke-width="2.4"/>
+    <path d="M58 60 H68 L72 50 L80 72 L86 54 L90 60 H102" fill="none" stroke="#8ff0cf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>
+    <rect x="65" y="74" width="9" height="4.6" rx="2.3" fill="#eafff8"/>
+    <rect x="86" y="74" width="9" height="4.6" rx="2.3" fill="#eafff8"/>
+  </svg>`;
+}function personSVG(){
+  return `<svg viewBox="0 0 160 200" aria-label="The person">
+    <defs><radialGradient id="hglow" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#f5b942" stop-opacity=".5"/><stop offset="1" stop-color="#f5b942" stop-opacity="0"/></radialGradient></defs>
+    <ellipse cx="80" cy="180" rx="42" ry="8" fill="#000" opacity=".25"/>
+    <circle cx="80" cy="74" r="58" fill="url(#hglow)"/>
+    <path d="M34 196 Q34 152 80 152 Q126 152 126 196 Z" fill="#161e3e" stroke="#f5b942" stroke-opacity=".55" stroke-width="1.5"/>
+    <circle cx="80" cy="76" r="34" fill="#2a2f4a" stroke="#f5b942" stroke-width="2.2"/>
+    <!-- spark/idea over head -->
+    <path d="M80 30 l3 8 8 1 -6 6 2 8 -7 -4 -7 4 2 -8 -6 -6 8 -1z" fill="#f5b942" opacity=".95"/>
+    <circle cx="70" cy="72" r="3.4" fill="#ffe6ad"/><circle cx="90" cy="72" r="3.4" fill="#ffe6ad"/>
+    <path d="M72 88 q8 6 16 0" stroke="#ffe6ad" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
+// inject characters
+document.getElementById('heroFigs').innerHTML =
+  `<div class="avatar karam">${karamSVG()}<div class="nameplate"><div class="nm">Karam</div><div class="rl">The AI Engineer</div></div></div>
+   <div class="avatar nicolle">${nicolleSVG()}<div class="nameplate"><div class="nm">Nicolle</div><div class="rl">The Researcher</div></div></div>
+   <div class="avatar galen">${galenSVG()}<div class="nameplate"><div class="nm">Galen</div><div class="rl">The Clinical Colleague</div></div></div>`;
+document.getElementById('karamMini').innerHTML = karamSVG();
+document.getElementById('nicolleMini').innerHTML = nicolleSVG();
+document.getElementById('galenMini').innerHTML = galenSVG();
+document.getElementById('bn').innerHTML = nicolleSVG();
+document.getElementById('bk').innerHTML = karamSVG();
+document.getElementById('bh').innerHTML = personSVG();
+document.getElementById('bg').innerHTML = galenSVG();
+document.getElementById('endFigs').innerHTML = nicolleSVG()+galenSVG()+personSVG()+karamSVG();
+
+// ===== scroll reveal =====
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.18});
+document.querySelectorAll('.reveal:not(.in)').forEach(function(el){io.observe(el);});
+
+// ===== progress bar =====
+var prog=document.getElementById('prog');
+function onScroll(){var h=document.documentElement;var p=h.scrollTop/(h.scrollHeight-h.clientHeight);prog.style.width=(p*100)+'%';}
+document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+// ===== bridge pulse animation =====
+(function(){
+  var pulse=document.getElementById('bpulse'); if(!pulse) return;
+  var t=0, reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ pulse.style.left='50%'; return; }
+  function tick(){ t=(t+0.5)%100; pulse.style.left=t+'%';
+    pulse.style.background = t<50? '#2dd4bf' : (t<55?'#f5b942':'#7c83ff');
+    requestAnimationFrame(function(){setTimeout(tick,40);}); }
+  tick();
+})();
+
+// ===== LIVE TWO-AGENT CHAT =====
+(function(){
+  // inject small avatars into chat headers
+  var avN=document.getElementById('avN'), avK=document.getElementById('avK');
+  if(avN) avN.innerHTML=nicolleSVG(); if(avK) avK.innerHTML=karamSVG(); var avG=document.getElementById('avG'); if(avG) avG.innerHTML=galenSVG();
+
+  var synth=window.speechSynthesis||null;
+  function pickVoice(female){ if(!synth) return null; var vs=synth.getVoices()||[];
+    var pref=vs.filter(function(v){return /en(-|_)?(US|GB)?/i.test(v.lang);});
+    if(female){ return pref.find(function(v){return /female|samantha|zira|jenny|aria|google us english/i.test(v.name);})||pref[0]||vs[0]||null; }
+    return pref.find(function(v){return /male|daniel|alex|david|fred|google uk english male/i.test(v.name);})||pref[1]||pref[0]||vs[0]||null;
+  }
+
+  function makeAgent(key, opts){
+    var body=document.getElementById(opts.body), input=document.getElementById(opts.input),
+        send=document.getElementById(opts.send), mic=document.getElementById(opts.mic),
+        voiceBtn=document.getElementById(opts.voice), sug=document.getElementById(opts.sug),
+        col=document.getElementById(opts.col);
+    var busy=false, typing=null, voiceOn=false, lastAns='';
+
+    // suggested prompts
+    (opts.suggest||[]).forEach(function(q){
+      var b=document.createElement('button'); b.textContent=q;
+      b.addEventListener('click',function(){ input.value=q; ask(q); });
+      sug.appendChild(b);
+    });
+
+    function think(){ body.innerHTML='<span class="cc-think"><i></i><i></i><i></i></span>'; }
+    function typeOut(t){
+      if(typing) clearInterval(typing);
+      body.innerHTML=''; var s=document.createElement('span'); body.appendChild(s);
+      var c=document.createElement('span'); c.className='cc-cursor'; body.appendChild(c);
+      var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(reduce){ s.textContent=t; c.remove(); return; }
+      var i=0; typing=setInterval(function(){ s.textContent=t.slice(0,i); i+=2; body.scrollTop=body.scrollHeight;
+        if(i>=t.length){ s.textContent=t; clearInterval(typing); c.remove(); } },12);
+    }
+    function speak(t){ if(!voiceOn||!synth||!t) return;
+      try{ synth.cancel(); var u=new SpeechSynthesisUtterance(t); var v=pickVoice(opts.female); if(v) u.voice=v; u.rate=1.0; synth.speak(u);}catch(e){} }
+
+    function ask(q){ q=(q||'').trim(); if(!q||busy) return;
+      busy=true; send.disabled=true; input.value=''; think();
+      col.classList.add('active');
+      // dim the other column's active glow
+      document.querySelectorAll('.chat-col').forEach(function(c){ if(c!==col) c.classList.remove('active'); });
+      fetch('/.netlify/functions/ask',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({question:q, agent:key})})
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,d:d}; }).catch(function(){ return {ok:r.ok,d:null}; }); })
+      .then(function(res){
+        if(res.ok && res.d && res.d.answer){ lastAns=res.d.answer; typeOut(res.d.answer); speak(res.d.answer); }
+        else {
+          var who = (key==='KARAM') ? 'Karam' : 'Nicolle';
+          var msg;
+          if(res.d && res.d.error && /not configured|ANTHROPIC_API_KEY/i.test(res.d.error)){
+            msg = "I'm here, but I'm not quite plugged in yet — the team is finishing my setup. Try again in a little while, or reach us at info@bionectech.com.";
+          } else {
+            msg = "I'm having a moment — that didn't come through on my end. Mind trying once more? If it keeps happening, drop us a line at info@bionectech.com.";
+          }
+          typeOut(msg);
+        }
+      }).catch(function(){
+        // network / endpoint unreachable
+        typeOut("I can't reach the Lab right now — looks like a connection hiccup on the way to me. Please check your connection and try again in a moment. If it persists, info@bionectech.com will reach the team.");
+      })
+      .then(function(){ busy=false; send.disabled=false; });
+    }
+    send.addEventListener('click',function(){ ask(input.value); });
+    input.addEventListener('keydown',function(e){ if(e.key==='Enter') ask(input.value); });
+
+    // voice output toggle
+    if(voiceBtn){ if(!synth){ voiceBtn.style.display='none'; }
+      voiceBtn.addEventListener('click',function(){ voiceOn=!voiceOn; voiceBtn.classList.toggle('on',voiceOn);
+        if(!voiceOn && synth) synth.cancel(); else if(voiceOn && lastAns) speak(lastAns); }); }
+
+    // voice input
+    var SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+    if(mic){ if(!SR){ mic.style.display='none'; }
+      else { var recog=new SR(); recog.lang='en-US'; recog.interimResults=true; var listening=false;
+        recog.addEventListener('result',function(e){ var t=''; for(var i=e.resultIndex;i<e.results.length;i++){t+=e.results[i][0].transcript;} input.value=t; });
+        recog.addEventListener('end',function(){ listening=false; mic.classList.remove('listening'); if(input.value.trim()) ask(input.value); });
+        recog.addEventListener('error',function(){ listening=false; mic.classList.remove('listening'); });
+        mic.addEventListener('click',function(){ if(listening){ try{recog.stop();}catch(e){} return; }
+          if(synth) synth.cancel(); input.value='';
+          try{ recog.start(); listening=true; mic.classList.add('listening'); }catch(e){} }); } }
+  }
+
+  makeAgent('NICOLLE',{body:'bodyN',input:'inN',send:'sendN',mic:'micN',voice:'voiceN',sug:'sugN',col:'colN',female:true,
+    suggest:["Compare the top RPM vendors and who wins","What does the evidence say on GLP-1 adherence?","Analyze the reimbursement case for remote monitoring"]});
+  makeAgent('KARAM',{body:'bodyK',input:'inK',send:'sendK',mic:'micK',voice:'voiceK',sug:'sugK',col:'colK',female:false,
+    suggest:["Design a patient medication-adherence dashboard","How would you make a clinical tool HIPAA-safe?","Sketch a FHIR data model for remote monitoring"]});
+  makeAgent('GALEN',{body:'bodyG',input:'inG',send:'sendG',mic:'micG',voice:'voiceG',sug:'sugG',col:'colG',female:false,
+    suggest:["Explain how HEDIS quality measures work","Walk me through a heart-failure care pathway","Difference between inpatient and outpatient coding?"]});
+
+  if(synth && typeof synth.onvoiceschanged!=='undefined'){ synth.onvoiceschanged=function(){ pickVoice(true); }; }
+})();
+(function(){
+  var who='N', deep=false;
+  var whoBtn=document.getElementById('whoBtn'), deepBtn=document.getElementById('deepBtn');
+  var whoName=document.getElementById('whoName'), deepName=document.getElementById('deepName');
+  var state=document.getElementById('tgState'), hint=document.getElementById('tgHint');
+  function render(){
+    whoName.textContent = who==='N'?'Nicolle':'Karam';
+    whoBtn.setAttribute('aria-pressed', who==='K'?'true':'false');
+    whoBtn.classList.toggle('smartest', who==='K');
+    deepName.textContent = deep?'Smartest':'Standard';
+    deepBtn.setAttribute('aria-pressed', deep?'true':'false');
+    var html='', h='';
+    if(who==='N'){
+      if(!deep){ html='<span class="who n">Nicolle</span> · researching the open web…<br>"On it — searching now, I\'ll bring back sources and a short summary."';
+        h='Nicolle reaches the web when depth is set to Standard. This is when she goes exploring.'; }
+      else { html='<span class="who n">Nicolle</span> · thinking carefully (no live web)<br>"With Smartest on I reason from what we have — I won\'t be searching the web right now."';
+        h='Flip depth back to Standard when you want Nicolle to actually go search.'; }
+    } else {
+      html='<span class="who k">Karam</span> · reasoning deeply<br>"Hand me the problem and the findings. I\'ll work it through — step by step — and I won\'t go to the web."';
+      h='Karam never browses the web — by design. He thinks. Bring him what Nicolle finds.';
+    }
+    state.innerHTML=html; hint.textContent=h;
+  }
+  whoBtn.addEventListener('click',function(){ who=who==='N'?'K':'N'; render(); });
+  deepBtn.addEventListener('click',function(){ deep=!deep; render(); });
+  render();
+})();
+</script>
+</body>
+</html>
